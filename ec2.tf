@@ -6,7 +6,7 @@ resource "aws_network_interface" "interface_master" {
 }
 
 resource "aws_eip" "kxs_master_ip1" {
-  vpc                       = true
+  domain                    = "vpc"
   network_interface         = aws_network_interface.interface_master.id
   associate_with_private_ip = aws_network_interface.interface_master.private_ip
   depends_on = [
@@ -16,10 +16,10 @@ resource "aws_eip" "kxs_master_ip1" {
 
 # creacion de ec2 para mastar kxs
 resource "aws_instance" "kxs_master" {
-  ami               = "ami-08ca3fed11864d6bb"
+  ami               = "ami-0e297b87964330763"
   instance_type     = "t4g.micro"
   availability_zone = aws_subnet.kxs-subnet.availability_zone
-  key_name          = "test-server"
+  key_name          = "kxs-master"
   #  count = 2 para instancias clon
 
   network_interface {
@@ -46,8 +46,8 @@ resource "aws_instance" "kxs_master" {
 
 # Creación de las instancias EC2 Spot
 resource "aws_spot_instance_request" "spot_worker" {
-  count                  = 2                       # Cambia esto por el número de instancias Spot que necesites
-  ami                    = "ami-0c94855ba95c574c8" # Cambia esto por la AMI que necesites
+  count                  = 1                       # Cambia esto por el número de instancias Spot que necesites
+  ami                    = "ami-0e297b87964330763" # Cambia esto por la AMI que necesites
   instance_type          = "t4g.medium"
   subnet_id              = aws_subnet.kxs-subnet.id
   vpc_security_group_ids = ["${aws_security_group.kxs-basic-traffic.id}"]

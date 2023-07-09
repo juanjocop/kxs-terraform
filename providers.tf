@@ -5,6 +5,16 @@ terraform {
       version = "5.7.0"
     }
   }
+  backend "s3" {
+    # Replace this with your bucket name!
+    bucket = "kxs-terraform-state"
+    key    = "global/s3/terraform.tfstate"
+    region = "eu-west-1"
+
+    # Replace this with your DynamoDB table name!
+    dynamodb_table = "kxs-terraform-locks"
+    encrypt        = true
+  }
 }
 
 provider "aws" {
