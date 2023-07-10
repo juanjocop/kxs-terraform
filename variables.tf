@@ -1,23 +1,33 @@
 variable "cidr_block_vpc" {
   description = "cidr block for the subnet"
-  default = "10.0.0.0/16"
-  type = string
+  default     = "10.0.0.0/16"
+  type        = string
 }
 
 variable "cidr_block_subnet" {
   description = "cidr block for the subnet"
-  default = "10.0.1.0/24"
-  type = string
+  default     = "10.0.1.0/24"
+  type        = string
 }
 
 variable "aws_access_key" {
   description = "clave de acceso para aws"
-  type = string
+  type        = string
 }
 
 variable "aws_secret_key" {
   description = "secret key de aws"
-  type = string
+  type        = string
+}
+
+variable "kxs_ec2_master_keyname" {
+  description = "keyname del keypair de la instancia ec2 kxs master"
+  type        = string
+}
+
+variable "kxs_ec2_worker_keyname" {
+  description = "keyname del keypair de la instancia ec2 kxs worker"
+  type        = string
 }
 
 # variable "haproxy_cfg" {
