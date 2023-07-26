@@ -1,3 +1,9 @@
+variable "ami_kxs_arm" {
+  description = "ami para los nodos del cluster"
+  default     = "ami-0083086bc808b1d71"
+  type        = string
+}
+
 variable "cidr_block_vpc" {
   description = "cidr block for the subnet"
   default     = "10.0.0.0/16"
