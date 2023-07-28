@@ -5,7 +5,7 @@ variable "ami_kxs_arm" {
 }
 
 variable "cidr_block_vpc" {
-  description = "cidr block for the subnet"
+  description = "cidr block for the vpc"
   default     = "10.0.0.0/16"
   type        = string
 }
@@ -32,6 +32,11 @@ variable "kxs_ec2_master_keyname" {
 }
 
 variable "kxs_ec2_worker_keyname" {
+  description = "keyname del keypair de la instancia ec2 kxs worker"
+  type        = string
+}
+
+variable "kxs_ec2_mariadb_keyname" {
   description = "keyname del keypair de la instancia ec2 kxs worker"
   type        = string
 }

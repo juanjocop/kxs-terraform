@@ -37,12 +37,32 @@ resource "aws_route_table_association" "kxs-rta" {
   route_table_id = aws_route_table.kxs-route.id
 }
 
-resource "aws_security_group" "kxs-basic-traffic" {
-  name        = "kxs-web-traffic"
+resource "aws_security_group" "kxs-master-sg" {
+  name        = "kxs-master-sg"
   description = "Grupo de seguridad basico del cluster"
   vpc_id      = aws_vpc.kxs-vpc.id
 
   tags = {
-    "Name" = "cluster-security"
+    "app" : "kxs"
+  }
+}
+
+resource "aws_security_group" "kxs-worker-sg" {
+  name        = "kxs-worker-sg"
+  description = "Grupo de seguridad basico del cluster"
+  vpc_id      = aws_vpc.kxs-vpc.id
+
+  tags = {
+    "app" : "kxs"
+  }
+}
+
+resource "aws_security_group" "kxs-mariadb-sg" {
+  name        = "kxs-mariadb-sg"
+  description = "Grupo de seguridad basico del cluster"
+  vpc_id      = aws_vpc.kxs-vpc.id
+
+  tags = {
+    "app" : "kxs"
   }
 }
