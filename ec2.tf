@@ -93,10 +93,10 @@ resource "aws_instance" "kxs_master" {
   #     command = "echo '${self.public_ip}\n${self.private_ip}' > ips_${aws_instance.kxs_master.tags.Name}.txt"
   #   }
 
-  #   provisioner "local-exec" {
-  #     when    = destroy
-  #     command = "rm ips_ubuntu-kxs_master.txt"
-  #   }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm ~/.ssh/kxs_master.pem"
+  }
 
   tags = {
     "Name" = "kxs_master"
@@ -133,6 +133,11 @@ resource "aws_instance" "kxs_worker_1" {
   depends_on = [
     aws_eip.kxs_worker_1_ip1
   ]
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm ~/.ssh/kxs_worker.pem"
+  }
 
   output "ec2_kxs_master_ip" {
     value       = self.public_ip
@@ -174,6 +179,11 @@ resource "aws_instance" "kxs_mariadb" {
     aws_eip.kxs_master_ip1
   ]
 
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm ~/.ssh/kxs_mariadb.pem"
+  }
+
   output "ec2_kxs_mariadb_ip" {
     value       = self.public_ip
     description = "Ip de mariadb kxs"
@@ -198,7 +208,4 @@ resource "local_file" "kxs_mariadb_keypair" {
   file_permission   = "0600"
 }
 
-provisioner "local-exec" {
-  when    = destroy
-  command = "rm ~/.ssh/kxs_master.pem && rm ~/.ssh/kxs_worker.pem && rm ~/.ssh/kxs_mariadb.pem"
-}
+
