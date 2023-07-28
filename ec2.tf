@@ -182,12 +182,23 @@ resource "aws_instance" "kxs_mariadb" {
 
 resource "local_file" "kxs_master_keypair" {
   sensitive_content = tls_private_key.kxs_ec2_master_private_key.private_key_pem
-  filename          = "${path.module}/kxs_master.pem"
+  filename          = "~/.ssh/kxs_master.pem"
   file_permission   = "0600"
 }
 
-resource "local_file" "kxs_master_keypair" {
+resource "local_file" "kxs_worker_keypair" {
   sensitive_content = tls_private_key.kxs_ec2_worker_private_key.private_key_pem
-  filename          = "${path.module}/kxs_worker.pem"
+  filename          = "~/.ssh/kxs_worker.pem"
   file_permission   = "0600"
+}
+
+resource "local_file" "kxs_mariadb_keypair" {
+  sensitive_content = tls_private_key.kxs_ec2_mariadb_private_key.private_key_pem
+  filename          = "~/.ssh/kxs_mariadb.pem"
+  file_permission   = "0600"
+}
+
+provisioner "local-exec" {
+  when    = destroy
+  command = "rm ~/.ssh/kxs_master.pem && rm ~/.ssh/kxs_worker.pem && rm ~/.ssh/kxs_mariadb.pem"
 }
