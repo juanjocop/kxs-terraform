@@ -41,6 +41,27 @@ variable "kxs_ec2_mariadb_keyname" {
   type        = string
 }
 
+variable "vpc_domotica" {
+  description = "VPC creada con anterioridad para netmaker y docker con domotica"
+  type        = string
+}
+
+variable "vpc_domotica_subnet_1" {
+  description = "Subnet creada con anterioridad para netmaker y docker con domotica"
+  type        = string
+}
+
+variable "availability_zone_1" {
+  description = "Zona de disponibilidad usada para domotica"
+  type        = string
+  default     = "eu-west-1a"
+}
+
+variable "ruta_keypairs" {
+  description = "ruta donde se descargaran las keypairs ssh para poder entrar en los servers"
+  type        = string
+}
+
 # variable "haproxy_cfg" {
 #   description = "archivo de configuración para haproxy load balancer"
 #   type = string

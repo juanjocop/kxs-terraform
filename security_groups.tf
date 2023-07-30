@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "SSH_master" {
   security_group_id = aws_security_group.kxs-master-sg.id
 }
 
-resource "aws_security_group_rule" "allow_all" {
+resource "aws_security_group_rule" "allow_all_master" {
   type              = "egress"
   to_port           = 0
   protocol          = "-1"
@@ -52,7 +52,7 @@ resource "aws_security_group_rule" "flannel_master" {
   from_port         = 8472
   to_port           = 8472
   protocol          = "UDP"
-  cidr_blocks       = var.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-master-sg.id
 }
 
@@ -61,7 +61,7 @@ resource "aws_security_group_rule" "kubelet_metrics_master" {
   from_port         = 10250
   to_port           = 10250
   protocol          = "TCP"
-  cidr_blocks       = var.cidr.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-master-sg.id
 }
 
@@ -70,7 +70,7 @@ resource "aws_security_group_rule" "flannel_ipv4_wg_master" {
   from_port         = 51820
   to_port           = 51820
   protocol          = "UDP"
-  cidr_blocks       = var.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-master-sg.id
 }
 
@@ -84,7 +84,7 @@ resource "aws_security_group_rule" "SSH_worker" {
   security_group_id = aws_security_group.kxs-worker-sg.id
 }
 
-resource "aws_security_group_rule" "allow_all" {
+resource "aws_security_group_rule" "allow_all_worker" {
   type              = "egress"
   to_port           = 0
   protocol          = "-1"
@@ -98,7 +98,7 @@ resource "aws_security_group_rule" "flannel_worker" {
   from_port         = 8472
   to_port           = 8472
   protocol          = "UDP"
-  cidr_blocks       = var.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-worker-sg.id
 }
 
@@ -107,7 +107,7 @@ resource "aws_security_group_rule" "kubelet_metrics_worker" {
   from_port         = 10250
   to_port           = 10250
   protocol          = "TCP"
-  cidr_blocks       = var.cidr.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-worker-sg.id
 }
 
@@ -116,7 +116,7 @@ resource "aws_security_group_rule" "flannel_ipv4_wg_worker" {
   from_port         = 51820
   to_port           = 51820
   protocol          = "UDP"
-  cidr_blocks       = var.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-worker-sg.id
 }
 
@@ -135,7 +135,16 @@ resource "aws_security_group_rule" "mariadb_port" {
   from_port         = 3306
   to_port           = 3306
   protocol          = "TCP"
-  cidr_blocks       = var.cidr_block_subnet
+  cidr_blocks       = [var.cidr_block_subnet]
+  security_group_id = aws_security_group.kxs-mariadb-sg.id
+}
+
+resource "aws_security_group_rule" "mariadb_egress_vpc" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = [var.cidr_block_subnet]
   security_group_id = aws_security_group.kxs-mariadb-sg.id
 }
 
