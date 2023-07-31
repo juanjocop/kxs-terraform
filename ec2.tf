@@ -168,6 +168,12 @@ resource "aws_instance" "kxs_mariadb" {
     network_interface_id = aws_network_interface.interface_mariadb_1.id
   }
 
+  root_block_device {
+    volume_size           = 30 # Tamaño del volumen raíz en GiB
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
   tags = {
     "Name" = "kxs_mariadb"
     "app"  = "kxs"
