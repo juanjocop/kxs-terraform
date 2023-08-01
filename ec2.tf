@@ -3,20 +3,28 @@ resource "aws_network_interface" "interface_master" {
   subnet_id = var.vpc_domotica_subnet_1
   #  private_ips = var.aws_private_ip_range
   security_groups = [aws_security_group.kxs-master-sg.id]
+  tags = {
+    "Name" : "kxs-master-ni"
+    "app" : "kxs"
+  }
 }
 
-resource "aws_network_interface" "interface_worker_1" {
-  # subnet_id = aws_subnet.kxs-subnet.id
-  subnet_id = var.vpc_domotica_subnet_1
-  #  private_ips = var.aws_private_ip_range
-  security_groups = [aws_security_group.kxs-worker-sg.id]
-}
+# resource "aws_network_interface" "interface_worker_1" {
+#   # subnet_id = aws_subnet.kxs-subnet.id
+#   subnet_id = var.vpc_domotica_subnet_1
+#   #  private_ips = var.aws_private_ip_range
+#   security_groups = [aws_security_group.kxs-worker-sg.id]
+# }
 
 resource "aws_network_interface" "interface_mariadb_1" {
   # subnet_id = aws_subnet.kxs-subnet.id
   subnet_id = var.vpc_domotica_subnet_1
   #  private_ips = var.aws_private_ip_range
   security_groups = [aws_security_group.kxs-mariadb-sg.id]
+  tags = {
+    "Name" : "mariadb-ni"
+    "app" : "kxs"
+  }
 }
 
 resource "aws_eip" "kxs_master_ip1" {
@@ -26,6 +34,10 @@ resource "aws_eip" "kxs_master_ip1" {
   # depends_on = [
   #   aws_internet_gateway.kxs-gateway,
   # ]
+  tags = {
+    "Name" : "kxs-master-ip"
+    "app" : "kxs"
+  }
 }
 
 # resource "aws_eip" "kxs_worker_1_ip1" {
@@ -44,6 +56,9 @@ resource "aws_eip" "kxs_mariadb_1_ip1" {
   # depends_on = [
   #   aws_internet_gateway.kxs-gateway,
   # ]
+  tags = {
+    "Name" : "mariadb-ip"
+  }
 }
 
 # creacion de key pairs para kxs ec2 master
@@ -121,10 +136,13 @@ resource "aws_instance" "kxs_worker_1" {
   availability_zone = var.availability_zone_1
   key_name          = aws_key_pair.kxs_worker_key.key_name
 
-  network_interface {
-    device_index         = 0
-    network_interface_id = aws_network_interface.interface_worker_1.id
-  }
+  subnet_id              = var.vpc_domotica_subnet_1
+  vpc_security_group_ids = [aws_security_group.kxs-worker-sg.id]
+
+  # network_interface {
+  #   device_index         = 0
+  #   network_interface_id = aws_network_interface.interface_worker_1.id
+  # }
 
   tags = {
     "Name" = "kxs_worker_1"
