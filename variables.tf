@@ -16,6 +16,11 @@ variable "cidr_block_subnet" {
   type        = string
 }
 
+variable "cidr_block_netmaker" {
+  description = "cidr block de la vpn netmaker"
+  default     = "10.107.161.0/24"
+}
+
 variable "aws_access_key" {
   description = "clave de acceso para aws"
   type        = string

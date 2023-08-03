@@ -29,6 +29,15 @@ resource "aws_security_group_rule" "SSH_master" {
   security_group_id = aws_security_group.kxs-master-sg.id
 }
 
+resource "aws_security_group_rule" "master_netclient" {
+  type              = "ingress"
+  from_port         = 51821
+  to_port           = 51829
+  protocol          = "UDP"
+  cidr_blocks       = [var.cidr_block_subnet, var.cidr_block_netmaker]
+  security_group_id = aws_security_group.kxs-master-sg.id
+}
+
 resource "aws_security_group_rule" "allow_all_master" {
   type              = "egress"
   to_port           = 0
@@ -81,6 +90,15 @@ resource "aws_security_group_rule" "SSH_worker" {
   protocol          = "TCP"
   from_port         = 22
   cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.kxs-worker-sg.id
+}
+
+resource "aws_security_group_rule" "worker_netclient" {
+  type              = "ingress"
+  from_port         = 51821
+  to_port           = 51829
+  protocol          = "UDP"
+  cidr_blocks       = [var.cidr_block_subnet, var.cidr_block_netmaker]
   security_group_id = aws_security_group.kxs-worker-sg.id
 }
 
@@ -139,12 +157,22 @@ resource "aws_security_group_rule" "mariadb_port" {
   security_group_id = aws_security_group.kxs-mariadb-sg.id
 }
 
+resource "aws_security_group_rule" "mariadb_netclient" {
+  type              = "ingress"
+  from_port         = 51821
+  to_port           = 51829
+  protocol          = "UDP"
+  cidr_blocks       = [var.cidr_block_subnet, var.cidr_block_netmaker]
+  security_group_id = aws_security_group.kxs-mariadb-sg.id
+}
+
 resource "aws_security_group_rule" "mariadb_egress_vpc" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = [var.cidr_block_subnet]
+  type      = "egress"
+  from_port = 0
+  to_port   = 0
+  protocol  = "-1"
+  # cidr_blocks       = [var.cidr_block_subnet]
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.kxs-mariadb-sg.id
 }
 
